@@ -1,10 +1,11 @@
 /*
- * Conjunto de operacions que voy a realizar sobre una persona
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package Dominio;
 
 import static AccesoDatos.Conexion.close;
-import Dominio.Persona;
 import static AccesoDatos.Conexion.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,47 +18,36 @@ import java.util.List;
  *
  * @author Alumno Mañana
  */
-public class PersonaDao {
-    
-    private static final String SQL_SELECT ="SELECT * FROM TPersona";
-    private static final String SQL_INSERT = "INSERT INTO TPersona (personaNmae, personaApellidos,"
-            + "personaEmail,personaTelefono) VALUES (?,?,?,?)";
-//    private static final String SQL_UPDATE_ID = "UPDATE TPersona SET ? = ? "
-//            + "where personaId = ?";
-//    private static final String SQL_UPDATE = "UPDATE TPersona SET ? = ? "
-//            + "where ? = ?";
-    private static final String SQL_UPDATE = "UPDATE TPersona SET "
-            + "personaNmae = ?, "
-            + "personaApellidos = ?,"
-            + "personaEmail = ?,"
-            + "personaTelefono = ?"
+public class UsuarioDao {
+        private static final String SQL_SELECT ="SELECT * FROM usuario";
+    private static final String SQL_INSERT = "INSERT INTO usuario (nombre, password)"
+            + " VALUES (?,?)";
+    private static final String SQL_UPDATE = "UPDATE usuario SET "
+            + "nombre = ?, "
+            + "password = ?,"
             + "WHERE personaId = ?";
     
-    private static final String SQL_DELETE = "DELETE FROM usuario WHERE id = ?";
-    
 //    Método que nos lista todas las personas de nuestro sistema
-    public List<Persona> seleccionar() throws SQLException {
+    public List<Usuario> seleccionar() throws SQLException {
         //INICIALIZAR VARIABLES
         
         Connection conn = null;
         PreparedStatement stmt= null;
         ResultSet rs = null;
         Persona persona = null;
-        List<Persona> personas = new ArrayList<>();
+        List<Usuario> usuarios = new ArrayList<>();
         
         conn = getConnection();
         stmt = conn.prepareStatement(SQL_SELECT);
         rs = stmt.executeQuery();
         
         while(rs.next()){
-            int idPersona = rs.getInt("PersonaId");
+            int usuarioId = rs.getInt("id");
             String nombre = rs.getString("personaNmae");
-            String apellido = rs.getString("personaApellidos");
-            String email = rs.getString("personaEmail");
-            String tel = rs.getString("personaTelefono");
+            String password = rs.getString("personaApellidos");
             
             //Instancio un nuevo objeto
-            personas.add(new Persona(idPersona, nombre,apellido,email,tel));
+            usuarios.add(new Usuario(usuarioId, nombre,password));
             
         }
         
@@ -66,11 +56,11 @@ public class PersonaDao {
         close(stmt);
         close(conn);
         
-        return personas;
+        return usuarios;
     }
     
     //MÉTODO QUE INSERTA UNA PERSONA EN EL SISTEMA
-    public int insertar (Persona persona){
+    public int insertar (Usuario usuario){
         Connection conn =null;
         PreparedStatement stmt=null;
         int registro = 0;
@@ -87,10 +77,8 @@ public class PersonaDao {
             
             //3. ASIGNAR LOS VALORES A LOS INTERROGANTES DE LA CONSULTA
             
-            stmt.setString(1, persona.getPersonaName());
-            stmt.setString(2,  persona.getPersonaApellido());
-            stmt.setString(3,  persona.getPersonaEmail());
-            stmt.setString(4,  persona.getPersonaTelefono());
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getPassword());
             
             
             //4. EJECUTO LA QUERY
@@ -113,7 +101,7 @@ public class PersonaDao {
         return registro;
     }
     
-    public int actualizar (Persona persona){
+    public int actualizar (Usuario usuario){
         Connection conn =null;
         PreparedStatement stmt=null;
         int registro = 0;
@@ -130,11 +118,9 @@ public class PersonaDao {
             
             //3. ASIGNAR LOS VALORES A LOS INTERROGANTES DE LA CONSULTA
             
-            stmt.setString(1, persona.getPersonaName());
-            stmt.setString(2, persona.getPersonaApellido());
-            stmt.setString(3, persona.getPersonaEmail());
-            stmt.setString(4, persona.getPersonaTelefono());
-            stmt.setInt(5, persona.getPersonaID());
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getPassword());
+            stmt.setInt(5, usuario.getId());
             
             
             //4. EJECUTO LA QUERY
@@ -156,8 +142,4 @@ public class PersonaDao {
         }
         return registro;
     }
-    
-    
-    
-
 }

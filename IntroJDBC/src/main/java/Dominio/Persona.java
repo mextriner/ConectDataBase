@@ -77,6 +77,12 @@ public class Persona implements Serializable{
     public void setPersonaTelefono(String personaTelefono) {
         this.personaTelefono = personaTelefono;
     }
+
+    @Override
+    public String toString() {
+        return "Persona{" + "personaID=" + personaID + ", personaName=" + personaName + ", personaApellido=" + personaApellido + ", personaEmail=" + personaEmail + ", personaTelefono=" + personaTelefono + '}';
+    }
+    
     
    
     

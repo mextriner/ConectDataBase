@@ -39,8 +39,8 @@ public class Conexion {
         stm.close();
     }
     
-    public static void close(PreparedStatement stm) throws SQLException{
-        stm.close();
+    public static void close(PreparedStatement stmt) throws SQLException{
+        stmt.close();
     }
     
     public static void close(Connection conn) throws SQLException{
