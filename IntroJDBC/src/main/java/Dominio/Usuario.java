@@ -10,20 +10,23 @@ package Dominio;
  * @author Alumno Mañana
  */
 public class Usuario {
-    int id;
+    static int id = 0 ;
     String nombre;
     String password;
 
     public Usuario() {
+        id++;
     }
 
     public Usuario(int id, String nombre, String password) {
+        
         this.id = id;
         this.nombre = nombre;
         this.password = password;
     }
 
     public Usuario(String nombre, String password) {
+        this();
         this.nombre = nombre;
         this.password = password;
     }

@@ -33,7 +33,7 @@ public class PersonaDao {
             + "personaTelefono = ?"
             + "WHERE personaId = ?";
     
-    private static final String SQL_DELETE = "DELETE FROM usuario WHERE id = ?";
+    private static final String SQL_DELETE = "DELETE FROM TPersona WHERE PersonaId = ?";
     
 //    Método que nos lista todas las personas de nuestro sistema
     public List<Persona> seleccionar() throws SQLException {
@@ -157,6 +157,45 @@ public class PersonaDao {
         return registro;
     }
     
+    public int eliminar (Persona persona){
+        Connection conn =null;
+        PreparedStatement stmt=null;
+        int registro = 0;
+        
+        try{
+             //1. ESTABLECER CONEXIÓN
+        
+            conn = getConnection();
+            
+            //2. PREPARO LA INSTRUCCIÓN EJECUTABLE EN MYSQL
+            
+            stmt = conn.prepareStatement(SQL_UPDATE);
+            
+            
+            //3. ASIGNAR LOS VALORES A LOS INTERROGANTES DE LA CONSULTA
+            
+            stmt.setInt(1, persona.getPersonaID());
+            
+            
+            //4. EJECUTO LA QUERY
+            
+            registro = stmt.executeUpdate();
+            
+            
+        }catch(SQLException ex){
+            ex.printStackTrace(System.out);
+        }finally{
+            try{
+                close(stmt);
+                close(conn);
+            }catch(SQLException ex){
+                ex.printStackTrace(System.out);
+            
+            }
+            
+        }
+        return registro;
+    }
     
     
 

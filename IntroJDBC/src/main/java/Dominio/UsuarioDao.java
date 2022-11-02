@@ -26,6 +26,7 @@ public class UsuarioDao {
             + "nombre = ?, "
             + "password = ?,"
             + "WHERE personaId = ?";
+     private static final String SQL_DELETE = "DELETE FROM usuario WHERE id = ?";
     
 //    Método que nos lista todas las personas de nuestro sistema
     public List<Usuario> seleccionar() throws SQLException {
@@ -43,8 +44,8 @@ public class UsuarioDao {
         
         while(rs.next()){
             int usuarioId = rs.getInt("id");
-            String nombre = rs.getString("personaNmae");
-            String password = rs.getString("personaApellidos");
+            String nombre = rs.getString("nombre");
+            String password = rs.getString("password");
             
             //Instancio un nuevo objeto
             usuarios.add(new Usuario(usuarioId, nombre,password));
@@ -120,7 +121,7 @@ public class UsuarioDao {
             
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getPassword());
-            stmt.setInt(5, usuario.getId());
+            stmt.setInt(3, usuario.getId());
             
             
             //4. EJECUTO LA QUERY
@@ -141,5 +142,46 @@ public class UsuarioDao {
             
         }
         return registro;
+    }
+        
+        
+    public int eliminar (Usuario usuario){
+        
+        Connection conn =null;
+        PreparedStatement stmt=null;
+        int registro = 0;
+        
+        try{
+             //1. ESTABLECER CONEXIÓN
+        
+            conn = getConnection();
+            
+            //2. PREPARO LA INSTRUCCIÓN EJECUTABLE EN MYSQL
+            
+            stmt = conn.prepareStatement(SQL_DELETE);
+            
+            
+            //3. ASIGNAR LOS VALORES A LOS INTERROGANTES DE LA CONSULTA
+            stmt.setInt(1, usuario.getId());
+            
+            
+            //4. EJECUTO LA QUERY
+            registro = stmt.executeUpdate();
+            
+            
+        }catch(SQLException ex){
+            ex.printStackTrace(System.out);
+        }finally{
+            try{
+                close(stmt);
+                close(conn);
+            }catch(SQLException ex){
+                ex.printStackTrace(System.out);
+            
+            }
+            
+        }
+        return registro;
+        
     }
 }

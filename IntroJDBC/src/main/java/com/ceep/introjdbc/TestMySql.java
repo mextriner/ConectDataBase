@@ -5,6 +5,8 @@ package com.ceep.introjdbc;
 
 import Dominio.Persona;
 import Dominio.PersonaDao;
+import Dominio.Usuario;
+import Dominio.UsuarioDao;
 //import java.sql.Statement;
 //import java.sql.Connection;
 //import java.sql.DriverManager;
@@ -36,6 +38,24 @@ public class TestMySql {
         return pers;
         
     }
+    
+    public static List <Usuario> usuarios(){
+        
+        List <Usuario> usurs = null;
+        try{
+            List <Usuario> usuario = usuarioDao.seleccionar();
+            usurs = usuario;
+//            personas.forEach(persona->{
+//                System.out.println("persona = "+persona); 
+//            });
+        }catch(SQLException ex){
+            ex.printStackTrace(System.out);
+        }
+        return usurs;
+        
+    }
+    
+    public static UsuarioDao usuarioDao = new UsuarioDao();
         
     
     
@@ -53,12 +73,18 @@ public class TestMySql {
         persona2.setPersonaTelefono("666666666");
         
         
-        System.out.println(persona2.getPersonaTelefono()); 
 //        System.out.println(persAct(1));
         personaDao.actualizar(persona2);
         
+        Usuario usuario = new Usuario ("mextriner","1234");
         
+       usuarioDao.insertar(usuario);
        
+       usuario.setId(usurAct(1).getId());
+       
+        System.out.println(usuario);
+       
+        usuarioDao.eliminar(usuario);
     }
     
     public static Persona persAct(int id){
@@ -72,32 +98,17 @@ public class TestMySql {
             
         return actualizable;
     }
+    
+    public static Usuario usurAct(int id){
+        Usuario actualizable = null;
+        List <Usuario> lista = usuarios();
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getId() == id){
+                actualizable = lista.get(i);
+            }
+        }
+            
+        return actualizable;
+    }
        
 }
-
-
- //Definimos la url de conexiójn a nuestra base de datos y sus parámetros
-//        String url = "jdbc:mysql://localhost:3306/primer_test?useSSL=false"
-//                +"&useTimezone=true&serverTimezone=UTC"
-//                +"&allowPublicKeyRetrieval=true&";
-//        //Ahora tratamos de establecer la conexión con nuestra base de datos
-//        try{
-//            Connection conexion = DriverManager.getConnection(url,"root","1234");
-//            Statement instruccion = conexion.createStatement();
-//            String sql = "SELECT * FROM TPersona";
-//            ResultSet resultado = instruccion.executeQuery(sql);
-//            while(resultado.next()){
-//                System.out.println("IdPersona:"+resultado.getInt("PersonaId"));
-//                System.out.println("Nombre: "+resultado.getString("personaNmae"));
-//                System.out.println("Apellidos: "+resultado.getString("personaApellidos"));
-//                System.out.println("Email: "+resultado.getString("personaEmail"));
-//                System.out.println("Correo: "+resultado.getString("personaTelefono"));
-//            }
-//            resultado.close();
-//            instruccion.close();
-//            
-//        }catch(SQLException ex){
-//            ex.printStackTrace(System.out);
-//        }
-//        
-//    }
